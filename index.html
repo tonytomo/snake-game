@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+
+    <!-- Icon -->
+    <script src="https://kit.fontawesome.com/1d8f013707.js" crossorigin="anonymous"></script>
+
+    <!-- Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="drawSnake()">
+    <div class="container">
+        <canvas id="board" width="1200" height="520">
+            Canvas is not supported
+        </canvas>
+
+        <div class="score" id="score">0</div>
+        <button onmousedown="restart()" class="restart" id="restartbtn" style="display: none;"><i class="fa fa-redo"></i></button>
+        <button onmousedown="init()" class="start" id="startbtn" style="display: block;"><i class="far fa-play-circle"></i></button>
+        <button onmousedown="clear_obstacle()" class="eraser" id="erasebtn" style="display: block;"><i class="fas fa-eraser"></i></button>
+
+        <div class="info">
+            <p>Control = WASD | </p>
+
+            <p>Draw the obstacles by using mouse</p>
+
+            <p> | Inspiration from <a target="blank" href="https://www.educative.io/blog/javascript-snake-game-tutorial">Educative</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event" target="blank">Dev Mozilla org</a></p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
