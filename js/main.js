@@ -1,6 +1,6 @@
 // Initial variables
 const board_bg = "#111111";
-const gridSize = 30;
+const gridSize = 20;
 const fps = 60;
 const initialScore = 0;
 

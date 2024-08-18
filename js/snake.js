@@ -1,6 +1,6 @@
 // Initial variable
 const maxGrowingTime = 10;
-const initialSpeed = 3;
+const initialSpeed = 2;
 const initialSnakeLength = 20;
 const snake_col = "#00cc03";
 const snakeBody_col = "#096e0a";
@@ -33,8 +33,8 @@ function createNewSnake(
     startPointX = Math.round((window.innerWidth * 0.2) / (gridSize / 2)) *
         gridSize,
     startPointY = window.innerWidth < 600
-        ? Math.round((window.innerHeight * 0.1) / (gridSize / 2)) * gridSize
-        : Math.round((window.innerHeight * 0.2) / (gridSize / 2)) * gridSize,
+        ? Math.round((board.height * 0.1) / (gridSize / 2)) * gridSize
+        : Math.round((board.height * 0.2) / (gridSize / 2)) * gridSize,
     snakeLength = initialSnakeLength,
     snakeSpeed = initialSpeed
 ) {

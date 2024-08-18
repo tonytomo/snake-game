@@ -32,15 +32,34 @@
                     Start the game
                 </p>
                 <div class="controlBox">
-                    <button
-                        disabled
-                        type="button"
-                        class="controlButton"
-                        onmousedown="goUp()"
-                    >
-                        <i class="gg-arrow-up"></i>
-                    </button>
                     <div class="flex">
+                        <button
+                            type="button"
+                            onmousedown="play()"
+                            id="playButton"
+                            class="gameButton"
+                        >
+                            <i class="gg-play-button"></i>
+                        </button>
+
+                        <button
+                            disabled
+                            type="button"
+                            class="controlButton"
+                            onmousedown="goUp()"
+                        >
+                            <i class="gg-arrow-up"></i></button
+                        ><button
+                            disabled
+                            type="button"
+                            onmousedown="restart()"
+                            id="restartButton"
+                            class="gameButton"
+                        >
+                            <i class="gg-redo"></i>
+                        </button>
+                    </div>
+                    <div class="middle">
                         <button
                             disabled
                             type="button"
@@ -49,23 +68,6 @@
                         >
                             <i class="gg-arrow-left"></i>
                         </button>
-                        <div class="middleControl">
-                            <button
-                                type="button"
-                                onmousedown="play()"
-                                id="playButton"
-                            >
-                                <i class="gg-play-button"></i>
-                            </button>
-                            <button
-                                disabled
-                                type="button"
-                                onmousedown="restart()"
-                                id="restartButton"
-                            >
-                                <i class="gg-redo"></i>
-                            </button>
-                        </div>
                         <button
                             disabled
                             type="button"
