@@ -1,5 +1,6 @@
 // Initial variables
-const food_col = "#ffffff";
+const food_col = "#b3bb40";
+const foodStroke_col = "#bb8a40";
 const scoreAdder = 500; // Score adder, the bigger the score adder, the bigger the score
 const initialScoreMultiplier = 30; // Score multiplier, the faster get the food, the bigger
 
@@ -11,8 +12,20 @@ var food = { x: 0, y: 0 };
  * Draw food on the board
  */
 function drawFood() {
+    ctx.fillStyle = foodStroke_col;
+    ctx.fillRect(
+        food.x + gridSize / 5,
+        food.y + gridSize / 5,
+        gridSize * 0.5,
+        gridSize * 0.5
+    );
     ctx.fillStyle = food_col;
-    ctx.fillRect(food.x, food.y, gridSize, gridSize);
+    ctx.fillRect(
+        food.x + gridSize / 3,
+        food.y + gridSize / 3,
+        gridSize * 0.25,
+        gridSize * 0.25
+    );
 }
 
 /**
@@ -52,6 +65,6 @@ function genFood() {
  */
 function decreaseMultiplier() {
     if (scoreMultiplier > 1) {
-        scoreMultiplier -= 0.5;
+        scoreMultiplier -= 0.2;
     }
 }

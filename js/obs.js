@@ -1,5 +1,7 @@
 // Initial variables
 const obs_col = "#ad2a2a";
+const obs_col2 = "#4d3e15";
+const obs_col3 = "#2f4d2f";
 
 // Obstacle variables
 var isDrawing = false; // Flag to check if the user is drawing
@@ -17,6 +19,8 @@ function clearObstacle() {
     createNewSnake();
     obstacle = [];
     drawSnake();
+
+    if (obstacle.length === 0) eraseButton.disabled = true;
 }
 
 /**
@@ -56,19 +60,23 @@ function drawLineObs(context, x1, y1, x2, y2) {
     // Get the new x and y coordinate
     const newX = x1 - (x1 % gridSize);
     const newY = y1 - (y1 % gridSize);
-    let flag = false;
 
     // Check if the game is not running
     if (gameplay === false) {
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
+        let flag = false;
 
         // Check if the obstacle is not on other obstacles
         for (let i = 0; i < obstacle.length; i++) {
-            if (!obstacle[i].x === newX || !obstacle[i].y === newY) {
-                obstacle.push({ x: newX, y: newY });
+            if (obstacle[i].x === newX && obstacle[i].y === newY) {
+                flag = true;
             }
         }
+        if (flag === false) {
+            obstacle.push({ x: newX, y: newY });
+        }
+
         // Draw the obstacles
         drawObs();
     }
@@ -79,6 +87,8 @@ function drawLineObs(context, x1, y1, x2, y2) {
  */
 function drawObs() {
     obstacle.forEach(drawObsPart);
+
+    if (obstacle.length > 0) eraseButton.disabled = false;
 }
 
 /**
@@ -86,6 +96,17 @@ function drawObs() {
  * @param {object} obsPart
  */
 function drawObsPart(obsPart) {
+    // Create a brick wall in one grid just using fillRect and 3 different colors
+    // Make it 3 layers to make it look like a brick wall
     ctx.fillStyle = obs_col;
-    ctx.fillRect(obsPart.x, obsPart.y, gridSize, gridSize);
+    ctx.fillRect(obsPart.x, obsPart.y, gridSize, gridSize / 3);
+    ctx.fillStyle = obs_col2;
+    ctx.fillRect(obsPart.x, obsPart.y + gridSize / 3, gridSize, gridSize / 3);
+    ctx.fillStyle = obs_col3;
+    ctx.fillRect(
+        obsPart.x,
+        obsPart.y + (gridSize * 2) / 3,
+        gridSize,
+        gridSize / 3
+    );
 }

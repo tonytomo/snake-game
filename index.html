@@ -6,75 +6,112 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Snake Game</title>
 
-        <script
-            src="https://kit.fontawesome.com/1d8f013707.js"
-            crossorigin="anonymous"
-        ></script>
-
         <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
         <link rel="stylesheet" href="style.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/css.gg@2.1.1/icons/icons.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Taprom&display=swap"
+            rel="stylesheet"
+        />
     </head>
 
     <body onload="init()">
         <div class="container">
             <canvas id="board"> Canvas is not supported </canvas>
+            <p class="score" id="score">0</p>
             <div class="controller">
-                <div class="scoreBox"></div>
-                <p class="logBox"></p>
-                <div class="controlBox"></div>
-                <div class="drawerBox"></div>
+                <p class="topScoreBox" id="topScore">
+                    <i class="gg-awards"></i>
+                    0
+                </p>
+                <p class="logBox" id="log">
+                    <i class="gg-info"></i>
+                    Start the game
+                </p>
+                <div class="controlBox">
+                    <button
+                        disabled
+                        type="button"
+                        class="controlButton"
+                        onmousedown="goUp()"
+                    >
+                        <i class="gg-arrow-up"></i>
+                    </button>
+                    <div class="flex">
+                        <button
+                            disabled
+                            type="button"
+                            class="controlButton"
+                            onmousedown="goLeft()"
+                        >
+                            <i class="gg-arrow-left"></i>
+                        </button>
+                        <div class="middleControl">
+                            <button
+                                type="button"
+                                onmousedown="play()"
+                                id="playButton"
+                            >
+                                <i class="gg-play-button"></i>
+                            </button>
+                            <button
+                                disabled
+                                type="button"
+                                onmousedown="restart()"
+                                id="restartButton"
+                            >
+                                <i class="gg-redo"></i>
+                            </button>
+                        </div>
+                        <button
+                            disabled
+                            type="button"
+                            class="controlButton"
+                            onmousedown="goRight()"
+                        >
+                            <i class="gg-arrow-right"></i>
+                        </button>
+                    </div>
+                    <button
+                        disabled
+                        type="button"
+                        class="controlButton"
+                        onmousedown="goDown()"
+                    >
+                        <i class="gg-arrow-down"></i>
+                    </button>
+                </div>
+                <div class="drawerBox">
+                    <button
+                        disabled
+                        onmousedown="clearObstacle()"
+                        class="eraser"
+                        id="eraseButton"
+                        style="display: block"
+                    >
+                        <i class="gg-trash"></i>
+                    </button>
+                    <button
+                        onmousedown="obsmod(1)"
+                        class="obsButton"
+                        id="obsButton"
+                        style="display: block"
+                    >
+                        Wall
+                    </button>
+                    <button
+                        onmousedown="obsmod(2)"
+                        class="obsButton"
+                        id="obsButton"
+                        style="display: block"
+                    >
+                        Line
+                    </button>
+                </div>
             </div>
-
-            <div class="score" id="score">0</div>
-            <div class="highscore" id="highscore">Highscore: 0</div>
-            <button
-                onmousedown="restart()"
-                class="restart"
-                id="restartbtn"
-                style="display: none"
-            >
-                <i class="fa fa-redo"></i>
-            </button>
-            <button
-                onmousedown="play()"
-                class="start"
-                id="startbtn"
-                style="display: block"
-            >
-                <i class="far fa-play-circle"></i>
-            </button>
-            <button
-                onmousedown="clearObstacle()"
-                class="eraser"
-                id="erasebtn"
-                style="display: block"
-            >
-                <i class="fas fa-eraser"></i>
-            </button>
-            <button
-                onmousedown="obsmod(1)"
-                class="obsbtn obsbtn-1"
-                id="obsbtn"
-                style="display: block"
-            >
-                1
-            </button>
-            <button
-                onmousedown="obsmod(2)"
-                class="obsbtn obsbtn-2"
-                id="obsbtn"
-                style="display: block"
-            >
-                2
-            </button>
-            <button
-                onmousedown="obsmod(3)"
-                class="obsbtn obsbtn-3"
-                id="obsbtn"
-                style="display: block"
-            >
-                3
-            </button>
         </div>
 
         <script src="js/obs.js"></script>

@@ -1,22 +1,27 @@
-// Colors
+// Initial variables
 const board_bg = "#111111";
+const gridSize = 30;
+const fps = 60;
+const initialScore = 0;
 
-// Canvas
-const gridSize = 20;
+// Game variables
+let score = initialScore;
+let highScore = 0;
+let gameplay = false; // Game is running or not
 
-// Game Fps
-const fps = 30;
-
-const initialScore = 0; // Skor awal
-
-let score = initialScore; // Skor
-let highScore = 0; // Skor tertinggi
-let gameplay = false; // Flag jika game dimulai maka true
-
-// Get canvas
+// Board variables
 const board = document.getElementById("board");
-// Return 2d context
 const ctx = board.getContext("2d");
+
+// Control Element
+const topScoreBox = document.getElementById("topScore");
+const scoreBox = document.getElementById("score");
+const logBox = document.getElementById("log");
+const arrowControl = document.querySelectorAll(".controlButton");
+const playButton = document.getElementById("playButton");
+const restartButton = document.getElementById("restartButton");
+const eraseButton = document.getElementById("eraseButton");
+const obsButton = document.querySelectorAll(".obsButton");
 
 // Init function
 function init() {
@@ -35,79 +40,80 @@ function onLoop() {
     move();
     drawSnake();
     drawObs();
-
-    // Ulang fungsi
     main();
-}
-
-// Set board size based on window size
-function setBoardSize() {
-    board.width = Math.round((window.innerWidth * 0.4) / 10) * 20;
-    if (window.innerWidth < 600) {
-        board.height = Math.round((window.innerHeight * 0.2) / 10) * 20;
-    } else {
-        board.height = Math.round((window.innerHeight * 0.4) / 10) * 20;
-    }
-}
-
-// Main function
-function main() {
-    const erasebtn = document.getElementById("erasebtn");
-    const restartbtn = document.getElementById("restartbtn");
-    const obsmodbtn = document.querySelectorAll("#obsbtn");
-    const highScoreText = document.getElementById("highscore");
-    gameplay = true;
-
-    if (game_end()) {
-        if (score > highScore) {
-            highScore = score;
-            highScoreText.innerHTML = `Highscore: ${highScore}`;
-        }
-        restartbtn.style.display = "block";
-        erasebtn.style.display = "block";
-        for (let i = 0; i < obsmodbtn.length; i++) {
-            obsmodbtn[i].style.display = "block";
-        }
-
-        gameplay = false;
-
-        return;
-    }
-
-    erasebtn.style.display = "none";
-    for (let i = 0; i < obsmodbtn.length; i++) {
-        obsmodbtn[i].style.display = "none";
-    }
-
-    changingDirectionFlag = false;
-    setTimeout(onLoop, 1000 / fps);
 }
 
 // Play function
 function play() {
-    const startbtn = document.getElementById("startbtn");
-    startbtn.style.display = "none";
+    gameplay = true;
 
     main();
 
     genFood();
 }
 
+// Main function
+function main() {
+    logBox.innerHTML = `<i class="gg-info"></i> Good Luck!`;
+    playButton.disabled = true;
+    restartButton.disabled = true;
+    eraseButton.disabled = true;
+    for (let i = 0; i < obsButton.length; i++) {
+        obsButton[i].disabled = true;
+    }
+    for (let i = 0; i < arrowControl.length; i++) {
+        arrowControl[i].disabled = false;
+    }
+    if (gameEnd()) {
+        restartButton.disabled = false;
+        for (let i = 0; i < arrowControl.length; i++) {
+            arrowControl[i].disabled = true;
+        }
+
+        if (score > highScore) {
+            highScore = score;
+            topScoreBox.innerHTML = `<i class="gg-awards"></i> ${highScore}`;
+        }
+
+        return;
+    }
+
+    changingDirectionFlag = false;
+    setTimeout(onLoop, 1000 / fps);
+}
+
+// Set board size based on window size
+function setBoardSize() {
+    if (window.innerWidth < 600) {
+        board.width =
+            Math.round((window.innerWidth * 0.4) / (gridSize / 2)) * gridSize;
+        board.height =
+            Math.round((window.innerHeight * 0.2) / (gridSize / 2)) * gridSize;
+    } else {
+        board.width = window.innerWidth * 0.6;
+        board.height =
+            Math.round((window.innerHeight * 0.4) / (gridSize / 2)) * gridSize;
+    }
+}
+
 // Restart function
 function restart() {
-    const restartbtn = document.getElementById("restartbtn");
-    const startbtn = document.getElementById("startbtn");
-    restartbtn.style.display = "none";
-    startbtn.style.display = "block";
+    logBox.innerHTML = `<i class="gg-info"></i> Try again!`;
+    playButton.disabled = false;
+    restartButton.disabled = true;
+    for (let i = 0; i < obsButton.length; i++) {
+        obsButton[i].disabled = false;
+    }
+    if (obstacle.length > 0) eraseButton.disabled = false;
 
     score = initialScore;
-    document.getElementById("score").innerHTML = score;
+    scoreBox.textContent = score;
 
     changingDirectionFlag = false;
     speed = initialSpeed;
     growingTime = 0;
     scoreMultiplier = initialScoreMultiplier;
-    tempTurnDirection = "";
+    tempTurnDirection = [];
 
     createNewSnake();
     clearBoard();
@@ -122,19 +128,30 @@ function restart() {
 
 // Fungsi menghapus board
 function clearBoard() {
-    ctx.clearRect(0, 0, board.width, board.height);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.beginPath();
 }
 
 // Fungsi game end
-function game_end() {
+function gameEnd() {
     // Cek jika nabrak ruas snake
     for (let i = 4; i < snake.length; i++) {
-        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+            logBox.innerHTML = `<i class="gg-info"></i> You hit yourself!`;
+            return true;
+        }
     }
     // Cek jika nabrak obstacle
     for (let i = 0; i < obstacle.length; i++) {
-        if (obstacle[i].x === snake[0].x && obstacle[i].y === snake[0].y)
+        if (
+            obstacle[i].x < snake[0].x + gridSize &&
+            obstacle[i].x + gridSize > snake[0].x &&
+            obstacle[i].y < snake[0].y + gridSize &&
+            obstacle[i].y + gridSize > snake[0].y
+        ) {
+            logBox.innerHTML = `<i class="gg-info"></i> You hit a wall!`;
             return true;
+        }
     }
 
     return false;

@@ -1,14 +1,17 @@
 // Initial variable
-const maxGrowingTime = 2;
-const initialSpeed = 10;
+const maxGrowingTime = 10;
+const initialSpeed = 3;
+const initialSnakeLength = 20;
 const snake_col = "#00cc03";
-const snakeStroke_col = "#000";
+const snakeBody_col = "#096e0a";
+const snakeEye_col = "#fff";
 
 // Initialize variables
 var speed = initialSpeed;
 var changingDirectionFlag = false; // Flag to check if the snake is changing direction
-var tempTurnDirection = ""; // Temporary direction to turn
+var tempTurnDirection = []; // Temporary direction to turn
 var growingTime = 0; // Time to grow
+var scorePlus = 0; // Score plus
 
 // Snake variables
 var snake = [];
@@ -27,11 +30,12 @@ document.addEventListener("keydown", changeDirectionInput);
  * @param {number} snakeSpeed
  */
 function createNewSnake(
-    startPointX = Math.round((window.innerWidth * 0.2) / 10) * 20,
+    startPointX = Math.round((window.innerWidth * 0.2) / (gridSize / 2)) *
+        gridSize,
     startPointY = window.innerWidth < 600
-        ? Math.round((window.innerHeight * 0.1) / 10) * 20
-        : Math.round((window.innerHeight * 0.2) / 10) * 20,
-    snakeLength = 5,
+        ? Math.round((window.innerHeight * 0.1) / (gridSize / 2)) * gridSize
+        : Math.round((window.innerHeight * 0.2) / (gridSize / 2)) * gridSize,
+    snakeLength = initialSnakeLength,
     snakeSpeed = initialSpeed
 ) {
     snake = [];
@@ -48,7 +52,39 @@ function createNewSnake(
  */
 function drawSnake() {
     let reverseSnake = snake.slice().reverse();
-    reverseSnake.forEach(drawSnakePart);
+
+    for (let i = 1; i < reverseSnake.length; i++) {
+        drawSnakePart(reverseSnake[i]);
+    }
+
+    // Make the head bigger
+    ctx.fillStyle = snake_col;
+    ctx.fillRect(
+        snake[0].x + gridSize / 15,
+        snake[0].y + gridSize / 15,
+        gridSize * 0.9,
+        gridSize * 0.9
+    );
+
+    const goUp = dy === -speed;
+    const goDown = dy === speed;
+    const goRight = dx === speed;
+    const goLeft = dx === -speed;
+
+    // Draw the snake's face
+    ctx.fillStyle = snakeEye_col;
+    ctx.fillRect(
+        snake[0].x + gridSize / 2 - gridSize / 20,
+        snake[0].y + gridSize / 2,
+        gridSize / 8,
+        gridSize / 8
+    );
+    ctx.fillRect(
+        snake[0].x + gridSize / 2 - gridSize / 20,
+        snake[0].y + gridSize / 4,
+        gridSize / 8,
+        gridSize / 8
+    );
 }
 
 /**
@@ -57,10 +93,13 @@ function drawSnake() {
  * @param {object} snakePart
  */
 function drawSnakePart(snakePart) {
-    ctx.fillStyle = snake_col;
-    ctx.fillRect(snakePart.x, snakePart.y, gridSize, gridSize);
-    ctx.strokeStyle = snakeStroke_col;
-    ctx.strokeRect(snakePart.x, snakePart.y, gridSize, gridSize);
+    ctx.fillStyle = snakeBody_col;
+    ctx.fillRect(
+        snakePart.x + gridSize / 10,
+        snakePart.y + gridSize / 10,
+        gridSize * 0.8,
+        gridSize * 0.8
+    );
 }
 
 /**
@@ -79,21 +118,23 @@ function changeDirectionInput(event) {
 
     changingDirectionFlag = true;
     const keyPressed = event.keyCode;
-    const goUp = dy === -speed;
-    const goDown = dy === speed;
-    const goRight = dx === speed;
-    const goLeft = dx === -speed;
-    if (LEFT_KEY.includes(keyPressed) && !goRight) {
-        tempTurnDirection = "left";
+
+    if (LEFT_KEY.includes(keyPressed)) {
+        tempTurnDirection.push("left");
     }
-    if (UP_KEY.includes(keyPressed) && !goDown) {
-        tempTurnDirection = "up";
+    if (UP_KEY.includes(keyPressed)) {
+        tempTurnDirection.push("up");
     }
-    if (RIGHT_KEY.includes(keyPressed) && !goLeft) {
-        tempTurnDirection = "right";
+    if (RIGHT_KEY.includes(keyPressed)) {
+        tempTurnDirection.push("right");
     }
-    if (DOWN_KEY.includes(keyPressed) && !goUp) {
-        tempTurnDirection = "down";
+    if (DOWN_KEY.includes(keyPressed)) {
+        tempTurnDirection.push("down");
+    }
+
+    // Remove the first element if it's more than 2
+    if (tempTurnDirection.length > 2) {
+        tempTurnDirection.shift();
     }
 }
 
@@ -103,22 +144,31 @@ function changeDirectionInput(event) {
 function changeDirection() {
     let inGrid = snake[0].x % gridSize === 0 && snake[0].y % gridSize === 0;
 
+    const goUp = dy === -speed;
+    const goDown = dy === speed;
+    const goRight = dx === speed;
+    const goLeft = dx === -speed;
+
     if (inGrid) {
-        if (tempTurnDirection === "left") {
+        if (tempTurnDirection[0] === "left" && !goRight) {
             dx = -speed;
             dy = 0;
+            tempTurnDirection.shift();
         }
-        if (tempTurnDirection === "up") {
+        if (tempTurnDirection[0] === "up" && !goDown) {
             dx = 0;
             dy = -speed;
+            tempTurnDirection.shift();
         }
-        if (tempTurnDirection === "right") {
+        if (tempTurnDirection[0] === "right" && !goLeft) {
             dx = speed;
             dy = 0;
+            tempTurnDirection.shift();
         }
-        if (tempTurnDirection === "down") {
+        if (tempTurnDirection[0] === "down" && !goUp) {
             dx = 0;
             dy = speed;
+            tempTurnDirection.shift();
         }
     }
 }
@@ -165,7 +215,8 @@ function move() {
         growingTime = maxGrowingTime;
 
         // Increase the score
-        let scorePlus = Math.round(scoreAdder * scoreMultiplier);
+        scorePlus = Math.round(scoreAdder * scoreMultiplier);
+        logBox.innerHTML = `<i class="gg-info"></i> Score +${scorePlus}`;
         score += scorePlus;
         scoreMultiplier = initialScoreMultiplier;
 
@@ -182,4 +233,31 @@ function move() {
             growingTime--;
         }
     }
+}
+
+/**
+ * Control the snake via touch
+ */
+function goUp() {
+    if (dy === speed) return;
+    dx = 0;
+    dy = -speed;
+}
+
+function goDown() {
+    if (dy === -speed) return;
+    dx = 0;
+    dy = speed;
+}
+
+function goRight() {
+    if (dx === -speed) return;
+    dx = speed;
+    dy = 0;
+}
+
+function goLeft() {
+    if (dx === speed) return;
+    dx = -speed;
+    dy = 0;
 }
