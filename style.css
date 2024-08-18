@@ -1,33 +1,32 @@
+:root {
+    --primary-color: #fff;
+    --secondary-color: #000;
+    --tertiary-color: #f00;
+    --background-color: #222;
+}
+
 body {
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    background-color: #111;
+    background-color: var(--background-color);
 }
 
 .container {
     position: relative;
-    text-align: center;
-    margin: 1rem;
-    width: 1200px;
-    max-height: 600px;
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary-color);
 }
 
 canvas {
-    border: 2px solid #fff;
-    background-color: #111;
-}
-
-.score {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 16pt;
-    color: #fff;
+    border: 2px solid var(--primary-color);
+    background-color: var(--secondary-color);
 }
 
 .restart {
@@ -36,14 +35,14 @@ canvas {
     right: 10px;
 
     display: none;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--secondary-color);
     border: none;
     outline: none;
     cursor: pointer;
 
     font-family: sans-serif;
     font-size: 12pt;
-    color: #fff;
+    color: var(--primary-color);
 }
 
 .start {
@@ -52,14 +51,14 @@ canvas {
     right: 10px;
 
     display: none;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--secondary-color);
     border: none;
     outline: none;
     cursor: pointer;
 
     font-family: sans-serif;
     font-size: 12pt;
-    color: #fff;
+    color: var(--primary-color);
 }
 
 .eraser {
@@ -68,14 +67,14 @@ canvas {
     right: 10px;
 
     display: none;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--secondary-color);
     border: none;
     outline: none;
     cursor: pointer;
 
     font-family: sans-serif;
     font-size: 12pt;
-    color: #fff;
+    color: var(--primary-color);
 }
 
 .obsbtn {
@@ -83,15 +82,15 @@ canvas {
     right: 10px;
 
     display: none;
-    background-color: rgba(0, 0, 0, 0);
-    border: 2px solid #fff;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--primary-color);
     border-radius: 5px;
     outline: none;
     cursor: pointer;
 
     font-family: sans-serif;
     font-size: 12pt;
-    color: #fff;
+    color: var(--primary-color);
 }
 .obsbtn-1 {
     top: 140px;
@@ -108,6 +107,6 @@ canvas {
     width: 100%;
     justify-content: center;
     gap: 20px;
-    font-family: 'Courier New', Courier, monospace;
-    color: #fff;
+    font-family: "Courier New", Courier, monospace;
+    color: var(--primary-color);
 }
