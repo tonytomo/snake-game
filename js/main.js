@@ -45,6 +45,7 @@ function onLoop() {
 
 // Play function
 function play() {
+    logBox.innerHTML = `<i class="gg-info"></i> Good Luck!`;
     gameplay = true;
 
     main();
@@ -54,7 +55,6 @@ function play() {
 
 // Main function
 function main() {
-    logBox.innerHTML = `<i class="gg-info"></i> Good Luck!`;
     playButton.disabled = true;
     restartButton.disabled = true;
     eraseButton.disabled = true;
